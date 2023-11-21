@@ -1,0 +1,19 @@
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Optional yarn cache directory
+.yarn
+
+# dotenv environment variables file
+.env
+!.env.example
+
+# local config
+**/.DS_Store
+.idea
+.vscode

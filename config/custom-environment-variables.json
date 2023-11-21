@@ -1,0 +1,18 @@
+{
+	"db": {
+		"url": "DB_URL"
+	},
+	"fileStorage": {
+		"awsAccessKeyId": "AWS_ACCESS_KEY_ID",
+		"awsSecretAccessKey": "AWS_SECRET_ACCESS_KEY",
+		"s3Region": "S3_REGION",
+		"s3Bucket": "S3_BUCKET"
+	},
+	"logger": {
+		"level": "LOG_LEVEL"
+	},
+	"http": {
+		"host": "HTTP_HOST",
+		"port": "HTTP_PORT"
+	}
+}

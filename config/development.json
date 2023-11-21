@@ -1,0 +1,11 @@
+{
+	"logger": {
+		"level": "debug"
+	},
+	"cors": [
+		"http://localhost:3000"
+	],
+	"http": {
+		"host": "127.0.0.1"
+	}
+}
