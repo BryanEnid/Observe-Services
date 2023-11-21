@@ -13,7 +13,10 @@
 	"db": {
 		"url": ""
 	},
-	"cors": [],
+	"cors": [
+		"http://localhost:3000",
+		"http://localhost:3300"
+	],
 	"logger": {
 		"level": "info"
 	}
