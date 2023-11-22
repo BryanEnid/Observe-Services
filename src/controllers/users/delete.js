@@ -8,14 +8,14 @@ const { deleteUser } = require('../../db/users');
  * @return {Promise<void>}
  */
 const deleteUserRoute = async (req, res, next) => {
-	const { params: { id } } = req;
+  const { params: { id } } = req;
 
-	const { deletedCount } = await deleteUser(id);
-	if (!deletedCount) {
-		return next(Boom.notFound(`User ${id} not found`));
-	}
+  const { deletedCount } = await deleteUser(id);
+  if (!deletedCount) {
+    return next(Boom.notFound(`User ${id} not found`));
+  }
 
-	return res.send({ success: true });
+  return res.send({ success: true });
 };
 
 module.exports = { deleteUserRoute };

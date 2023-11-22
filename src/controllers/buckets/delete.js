@@ -10,29 +10,26 @@ const { getFileNameFromUrl, deleteObject } = require('../../utils/s3');
  * @return {Promise<void>}
  */
 const deleteBucketRoute = async (req, res, next) => {
-	const { params: { id } } = req;
+  const { params: { id } } = req;
 
-	const bucket = await getBucketById(id);
-	if (!bucket) {
-		return next(Boom.notFound(`bucket ${id} not found`));
-	}
+  const bucket = await getBucketById(id);
+  if (!bucket) {
+    return next(Boom.notFound(`bucket ${id} not found`));
+  }
 
-	if (bucket.videos?.length) {
-		await Promise.all(
-			bucket.videos.reduce((res, { image, videoUrl }) => {
-				return [
-					...res,
-					deleteObject(getFileNameFromUrl(image)),
-					deleteObject(getFileNameFromUrl(videoUrl)),
-				];
-			}, [])
-		);
-	}
+  if (bucket.videos?.length) {
+    await Promise.all(
+      bucket.videos.reduce((acc, { image, videoUrl }) => ([
+        ...acc,
+        deleteObject(getFileNameFromUrl(image)),
+        deleteObject(getFileNameFromUrl(videoUrl)),
+      ]), []),
+    );
+  }
 
-	await deleteBucket(id);
+  await deleteBucket(id);
 
-	return res.send({ success: true });
-
+  return res.send({ success: true });
 };
 
 module.exports = { deleteBucketRoute };

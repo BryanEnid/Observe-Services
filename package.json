@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon -e js,json -w src -w config -w swagger -x yarn start:dev",
     "start:dev": "cross-env NODE_ENV=development NODE_PATH=src node src/index | pino-colada",
-    "start": "cross-env NODE_ENV=production NODE_PATH=src node src/index"
+    "start": "cross-env NODE_ENV=production NODE_PATH=src node src/index",
+    "lint": "eslint . --ext js --config .eslintrc.js --ignore-path ./.gitignore",
+    "lint-fix": "yarn lint -- --fix"
   },
   "author": "",
   "license": "ISC",
@@ -30,7 +32,14 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/eslint-parser": "^7.23.3",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.3",
     "cross-env": "^7.0.3",
+    "eslint": "^8.54.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0",
     "nodemon": "^3.0.1",
     "pino-colada": "^2.2.2"
   }

@@ -1,25 +1,21 @@
 const { UserModel } = require('../models');
 
-const getUsersList = () => {
-	return UserModel.find();
-}
+const getUsersList = () => UserModel.find();
 
 /**
  * @param {string} id User ID
  * @return {Promise<UserModel>}
  */
-const getUserById = (id) => {
-	return UserModel.findById(id);
-}
+const getUserById = (id) => UserModel.findById(id);
 
 /**
  * @param {UserModel} data User data
  * @return {Promise<UserSchema>}
  */
 const createUser = (data) => {
-	const user = new UserModel(data);
+  const user = new UserModel(data);
 
-	return user.save();
+  return user.save();
 };
 
 /**
@@ -27,16 +23,14 @@ const createUser = (data) => {
  * @param {UserModel} data User data
  * @return {Promise<UserModel>}
  */
-const updateUser = (id, data) => {
-	return UserModel.findByIdAndUpdate(id, data, { new: true });
-}
+const updateUser = (id, data) => UserModel.findByIdAndUpdate(id, data, { new: true });
 
 /**
  * @return {Promise<{ deletedCount: 1 }>} Promise with deleted count property
  * @param {string} _id User ID
  */
-const deleteUser = (_id) => {
-	return UserModel.deleteOne({ _id });
-}
+const deleteUser = (_id) => UserModel.deleteOne({ _id });
 
-module.exports = { getUsersList, getUserById, createUser, updateUser, deleteUser };
+module.exports = {
+  getUsersList, getUserById, createUser, updateUser, deleteUser,
+};

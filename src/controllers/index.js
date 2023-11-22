@@ -10,4 +10,4 @@ apiController.use('/users', usersController);
 apiController.use('/buckets', bucketsController);
 apiController.use('/upload', uploadController);
 
-module.exports =  apiController;
+module.exports = apiController;

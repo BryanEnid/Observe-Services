@@ -6,8 +6,8 @@ const { getUsersList } = require('../../db/users');
  * @return {Promise<void>}
  */
 const getUsersListRoute = async (req, res) => {
-	const user = await getUsersList();
-	return res.send(user);
+  const user = await getUsersList();
+  return res.send(user);
 };
 
 module.exports = { getUsersListRoute };

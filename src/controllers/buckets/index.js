@@ -18,4 +18,4 @@ router.post('/', express.json(), celebrate(createBucketValidation), errorWrapper
 router.put('/:id', express.json(), celebrate(updateBucketValidation), errorWrapper(updateBucketRoute));
 router.delete('/:id', errorWrapper(deleteBucketRoute));
 
-module.exports =  router;
+module.exports = router;

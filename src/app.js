@@ -9,35 +9,35 @@ const apiController = require('./controllers/index');
 const connectDB = require('./db');
 
 const app = async () => {
-	const corsWhitelist = config.get('cors');
-	const expressApp = express();
-	await connectDB();
+  const corsWhitelist = config.get('cors');
+  const expressApp = express();
+  await connectDB();
 
-	expressApp.use(loggingMiddleware());
+  expressApp.use(loggingMiddleware());
 
-	if (corsWhitelist.length > 0) {
-		logger().debug(`apply cors for: ${corsWhitelist.join(', ')}`);
-		expressApp.use(
-			cors({
-				origin(origin, callback) {
-					if (corsWhitelist.indexOf(origin) !== -1 || !origin) {
-						callback(null, true);
-					} else {
-						callback(new Error('Not allowed by CORS'));
-					}
-				},
-			}),
-		);
-	}
+  if (corsWhitelist.length > 0) {
+    logger().debug(`apply cors for: ${corsWhitelist.join(', ')}`);
+    expressApp.use(
+      cors({
+        origin(origin, callback) {
+          if (corsWhitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }
+        },
+      }),
+    );
+  }
 
-	expressApp.use('/api', apiController);
-	expressApp.get('/healthz', (req, res) => {
-		res.send('OK');
-	});
-	expressApp.use(errors());
-	expressApp.use(errorHandler);
+  expressApp.use('/api', apiController);
+  expressApp.get('/healthz', (req, res) => {
+    res.send('OK');
+  });
+  expressApp.use(errors());
+  expressApp.use(errorHandler);
 
-	return expressApp;
+  return expressApp;
 };
 
 module.exports = app;

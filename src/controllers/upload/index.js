@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.use(authMiddleware());
 router.post(
-	'/progress',
-	upload.fields([{ name: 'video', maxCount: 1 }, { name: 'image', maxCount: 1 }]),
-	errorWrapper(uploadProgressRoute)
+  '/progress',
+  upload.fields([{ name: 'video', maxCount: 1 }, { name: 'image', maxCount: 1 }]),
+  errorWrapper(uploadProgressRoute),
 );
 
 module.exports = router;

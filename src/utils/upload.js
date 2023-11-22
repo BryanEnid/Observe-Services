@@ -5,9 +5,9 @@ const config = require('config');
 const { s3 } = require('./s3');
 
 const storage = multerS3({
-	s3,
-	bucket: config.get('fileStorage.s3Bucket'),
+  s3,
+  bucket: config.get('fileStorage.s3Bucket'),
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 module.exports = { upload };
