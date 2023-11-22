@@ -1,5 +1,4 @@
 const Boom = require('boom');
-const config = require('config');
 
 const { deleteBucket, getBucketById } = require('../../db/buckets');
 const { getFileNameFromUrl, deleteObject } = require('../../utils/s3');
@@ -20,11 +19,11 @@ const deleteBucketRoute = async (req, res, next) => {
 
 	if (bucket.videos?.length) {
 		await Promise.all(
-			bucket.videos.reduce((res, { image, video }) => {
+			bucket.videos.reduce((res, { image, videoUrl }) => {
 				return [
 					...res,
 					deleteObject(getFileNameFromUrl(image)),
-					deleteObject(getFileNameFromUrl(video)),
+					deleteObject(getFileNameFromUrl(videoUrl)),
 				];
 			}, [])
 		);

@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const { getBucketById } = require('../../db/buckets');
 
 /**
@@ -9,6 +10,10 @@ const getBucketByIdRoute = async (req, res) => {
 	const { params: { id } } = req;
 
 	const bucket = await getBucketById(id);
+	if (!bucket) {
+		return next(Boom.notFound(`Bucket ${id} not found`));
+	}
+
 	return res.send(bucket);
 };
 

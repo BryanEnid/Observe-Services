@@ -9,14 +9,18 @@ const authMiddleware = () => {
 			return next(Boom.unauthorized());
 		}
 
-		const id = authorization.replace('Bearer ', '');
-		const user = await getUserById(id.trim());
+		let user;
+		try {
+			const id = authorization.replace('Bearer ', '').trim();
+			user = await getUserById(id);
+		} catch {}
+
 		if (!user) {
 			return next(Boom.unauthorized());
 		}
 
 		req.context = {
-			userId: id,
+			userId: user.id,
 		};
 
 		next();

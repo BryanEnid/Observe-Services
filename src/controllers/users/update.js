@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const { Joi } = require('celebrate');
 const { updateUser } = require('../../db/users');
 
@@ -46,9 +47,10 @@ const updateUserValidation = {
  *
  * @param req: Request
  * @param res: Response
+ * @param next: NextFunction
  * @return {Promise<void>}
  */
-const updateUserRoute = async (req, res) => {
+const updateUserRoute = async (req, res, next) => {
 	const { params: { id } } = req;
 
 	const user = await updateUser(id, req.body);

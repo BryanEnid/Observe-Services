@@ -11,7 +11,6 @@ const app = require('./app');
 const { swagger } = require('../swagger/swagger');
 const { logger } = require('./utils/logger');
 
-
 const port = parseInt(config.get('http.port'), 10);
 const host = config.get('http.host');
 

@@ -1,11 +1,13 @@
+const Boom = require('boom');
 const { getUserById } = require('../../db/users');
 
 /**
  * @param req: Request
  * @param res: Response
+ * @param next: NextFunction
  * @return {Promise<void>}
  */
-const getUserByIdRoute = async (req, res) => {
+const getUserByIdRoute = async (req, res, next) => {
 	const { params: { id } } = req;
 
 	const user = await getUserById(id);

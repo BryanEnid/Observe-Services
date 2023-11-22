@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const { deleteUser } = require('../../db/users');
 
 /**
