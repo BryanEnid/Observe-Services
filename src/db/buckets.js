@@ -35,6 +35,17 @@ const updateBucket = (id, data) => BucketModel.findByIdAndUpdate(id, data, { new
  */
 const deleteBucket = (_id) => BucketModel.deleteOne({ _id });
 
+const addVideo = (id, videoData) => BucketModel.findByIdAndUpdate(
+  id,
+  { $push: { videos: videoData } },
+  { new: true },
+);
+
 module.exports = {
-  getBucketsList, getBucketById, createBucket, updateBucket, deleteBucket,
+  getBucketsList,
+  getBucketById,
+  createBucket,
+  updateBucket,
+  deleteBucket,
+  addVideo,
 };

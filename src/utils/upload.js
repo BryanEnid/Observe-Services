@@ -8,6 +8,8 @@ const storage = multerS3({
   s3,
   bucket: config.get('fileStorage.s3Bucket'),
 });
-const upload = multer({ storage });
+const uploadToS3 = multer({ storage });
 
-module.exports = { upload };
+const uploadLocal = multer({ dest: 'uploads/' });
+
+module.exports = { uploadToS3, uploadLocal };
