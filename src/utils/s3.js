@@ -1,4 +1,4 @@
-const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, DeleteObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const config = require('config');
 
 const s3 = new S3Client({
@@ -11,6 +11,17 @@ const s3 = new S3Client({
 
 const getFileNameFromUrl = (url) => url.split('/').at(-1);
 
+const putObject = (file, fileName) => {
+  const s3Bucket = config.get('fileStorage.s3Bucket');
+  const command = new PutObjectCommand({
+    Bucket: s3Bucket,
+    Key: fileName,
+    Body: file,
+  });
+
+  return s3.send(command);
+};
+
 const deleteObject = (fileName) => {
   const s3Bucket = config.get('fileStorage.s3Bucket');
   const command = new DeleteObjectCommand({
@@ -21,4 +32,4 @@ const deleteObject = (fileName) => {
   return s3.send(command);
 };
 
-module.exports = { s3, getFileNameFromUrl, deleteObject };
+module.exports = { s3, getFileNameFromUrl, deleteObject, putObject };
