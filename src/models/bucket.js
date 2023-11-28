@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { VideoProcessSchema } = require('./video-process');
 
 const BucketSchema = new mongoose.Schema({
   creatorId: {
@@ -22,6 +23,7 @@ const BucketSchema = new mongoose.Schema({
     videoUrl: String,
     chosen: { type: Boolean, required: false },
     selected: { type: Boolean, required: false },
+    process: { type: VideoProcessSchema, required: false },
   }],
 }, {
   timestamps: true,

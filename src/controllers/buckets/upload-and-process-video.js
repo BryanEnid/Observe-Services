@@ -2,31 +2,42 @@ const path = require('path');
 const fs = require('fs');
 const Boom = require('boom');
 const { Joi } = require('celebrate');
+const { Types } = require('mongoose');
 
-const { addVideo } = require('../../db/buckets');
+const { VIDEO_PROCESSING_STATUS } = require('../../constants');
 const { combineVideo } = require('../../utils/process-video');
-const { putObject } = require('../../utils/s3');
+const { putObject, getFileUrl } = require('../../utils/s3');
+const { castToBoolean } = require('../../utils/boolean');
+const { logger } = require('../../utils/logger');
+const { addVideo } = require('../../db/buckets');
+const { setProcess, removeProcess } = require('../../db/video-processes');
 
 const uploadAndProcessValidation = {
   body: Joi.object({
-    image: Joi.binary().required(),
-    mainVideo: Joi.binary().required(),
-    subVideo: Joi.binary().required(),
+    image: Joi.binary(),
+    mainVideo: Joi.binary(),
+    subVideo: Joi.binary(),
     chosen: Joi.boolean().optional().allow(null),
     selected: Joi.boolean().optional().allow(null),
+    rounded: Joi.boolean().optional().default(false),
+    mainSound: Joi.boolean().optional().default(true),
+    subSound: Joi.boolean().optional().default(true),
   }).required(),
 };
 
-const removeFile = (path) => {
-  return new Promise((res, rej) => {
-    fs.unlink(path, (err) => {
-      if (err) {
-        rej(err);
-      }
-      res();
-    });
+/**
+ *
+ * @param {String} filePath
+ * @return {Promise<void>}
+ */
+const removeFile = (filePath) => new Promise((res, rej) => {
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      return rej(err);
+    }
+    return res();
   });
-};
+});
 
 /**
  * @param req: Request
@@ -38,51 +49,113 @@ const uploadAndProcessRoute = async (req, res, next) => {
   const {
     files,
     params: { id },
-    body: data
+    body: data,
   } = req;
 
-  console.log('\n=== id: ', id);
-  console.log('=== data: ', data);
-  console.log('=== files: ', files);
-
   const mainVideo = files?.mainVideo?.[0];
-  const subVideo = files?.mainVideo?.[0];
+  const subVideo = files?.subVideo?.[0];
   const image = files?.image?.[0];
+
+  const mainVideoPath = path.join(process.cwd(), 'uploads', mainVideo?.filename);
+  const subVideoPath = path.join(process.cwd(), 'uploads', subVideo?.filename);
+  const imagePath = path.join(process.cwd(), 'uploads', image?.filename);
+
   if (!mainVideo || !subVideo) {
+    await Promise.all([
+      removeFile(mainVideoPath),
+      removeFile(subVideoPath),
+      removeFile(imagePath),
+    ]);
     return next(Boom.badData('Videos are missed'));
   }
 
-  const mainVideoPath = path.join(process.cwd(), 'uploads', mainVideo.filename);
-  const subVideoPath = path.join(process.cwd(), 'uploads', subVideo.filename);
-  // TODO: upload directly to s3
-  const imagePath = path.join(process.cwd(), 'uploads', subVideo.filename);
+  const chosen = castToBoolean(data.chosen);
+  const selected = castToBoolean(data.selected);
+  const rounded = castToBoolean(data.rounded);
+  const mainSound = castToBoolean(data.mainSound);
+  const subSound = castToBoolean(data.subSound);
 
-  const resFileName = await combineVideo(mainVideoPath, subVideoPath);
-  const uploadResult = await putObject(
-    fs.createReadStream(path.join(process.cwd(), 'uploads', resFileName)),
-    resFileName
-  );
-  await Promise.all([
-    removeFile(mainVideoPath),
-    removeFile(subVideoPath),
-    removeFile(imagePath)
-  ]);
+  let resFilePath;
+  let updateBucket;
+  let newVideo;
+  try {
+    const imgUrl = getFileUrl(image.filename);
+    await putObject(
+      fs.createReadStream(imagePath),
+      image.filename,
+    );
 
-  console.log('=== uploadResult: ', uploadResult);
-  // const chosen = !!data.chosen && data.chosen === 'true';
-  // const selected = !!data.selected && data.selected === 'true';
-  //
-  // const updateBucket = await addVideo(id, {
-  //   chosen,
-  //   selected,
-  //   image: image.location,
-  //   videoUrl: video.location,
-  // });
-  // const newVideo = updateBucket.videos.find(
-  //   ({ image: imageUrl, videoUrl }) => imageUrl === image.location && videoUrl === video.location
-  // );
+    updateBucket = await addVideo(id, {
+      chosen,
+      selected,
+      image: imgUrl,
+      videoUrl: null,
+      process: {
+        status: VIDEO_PROCESSING_STATUS.PROCESSING,
+        percent: 0,
+      },
+    });
+    newVideo = updateBucket.videos.find(
+      ({ image: imageUrl }) => imageUrl === imgUrl,
+    );
+    setProcess(newVideo.id, { percent: newVideo.process.percent });
 
-  return res.status(200).send({/*newVideo*/});
+    res.status(200).send(newVideo);
+
+    const resFileName = await combineVideo(mainVideoPath, subVideoPath, {
+      rounded,
+      mainSound,
+      subSound,
+      outputFileName: `${Date.now().toString(16)}${new Types.ObjectId()}.mp4`,
+      onProgress: (percent) => {
+        if (newVideo.process.status !== VIDEO_PROCESSING_STATUS.PROCESSING) {
+          return;
+        }
+
+        newVideo.process.percent = percent;
+        setProcess(newVideo.id, { percent: -percent });
+      },
+    });
+    resFilePath = path.join(process.cwd(), 'uploads', resFileName);
+
+    newVideo.process.status = VIDEO_PROCESSING_STATUS.UPLOADING;
+    newVideo.process.percent = 0;
+    await updateBucket.save();
+    setProcess(newVideo.id, { percent: newVideo.process.percent });
+
+    await putObject(
+      fs.createReadStream(resFilePath),
+      resFileName,
+      (percent) => {
+        if (newVideo.process.status !== VIDEO_PROCESSING_STATUS.UPLOADING) {
+          return;
+        }
+
+        newVideo.process.percent = percent;
+        setProcess(newVideo.id, { percent });
+      },
+    );
+
+    newVideo.process.status = VIDEO_PROCESSING_STATUS.DONE;
+    newVideo.process.percent = 100;
+    newVideo.videoUrl = getFileUrl(resFileName);
+    await updateBucket.save();
+  } catch (e) {
+    logger().error(e);
+    newVideo.process.status = VIDEO_PROCESSING_STATUS.ERROR;
+    newVideo.process.errorMessage = e.message;
+    updateBucket.save();
+  } finally {
+    removeProcess(newVideo.id);
+    await Promise.all([
+      removeFile(mainVideoPath),
+      removeFile(subVideoPath),
+      removeFile(imagePath),
+      (resFilePath && removeFile(resFilePath)),
+    ]);
+  }
+
+  return null;
 };
 
 module.exports = { uploadAndProcessRoute, uploadAndProcessValidation };
