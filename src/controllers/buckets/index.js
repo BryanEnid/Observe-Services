@@ -10,7 +10,7 @@ const { createBucketRoute, createBucketValidation } = require('./create');
 const { updateBucketRoute, updateBucketValidation } = require('./update');
 const { deleteBucketRoute } = require('./delete');
 const { uploadVideoRoute } = require('./upload-video');
-const { uploadAndProcessRoute } = require('./upload-and-process-video');
+const { uploadAndProcessRoute, uploadAndProcessValidation } = require('./upload-and-process-video');
 
 const router = express.Router();
 
@@ -28,6 +28,7 @@ router.post(
 router.post(
   '/:id/process',
   uploadLocal.fields([{ name: 'mainVideo', maxCount: 1 }, { name: 'subVideo', maxCount: 1 }, { name: 'image', maxCount: 1 }]),
+  celebrate(uploadAndProcessValidation),
   errorWrapper(uploadAndProcessRoute),
 );
 

@@ -1,16 +1,23 @@
 const { BucketModel } = require('../models');
+const { populateWithProcesses } = require('./video-processes');
 
 /**
  * @param {{ creatorId?: string }} query Bucket ID
  * @return {Promise<BucketModel[]>}
  */
-const getBucketsList = (query) => BucketModel.find(query);
+const getBucketsList = async (query) => {
+  const buckets = await BucketModel.find(query);
+  return buckets.map(populateWithProcesses);
+};
 
 /**
  * @param {string} id Bucket ID
  * @return {Promise<BucketModel>}
  */
-const getBucketById = (id) => BucketModel.findById(id);
+const getBucketById = async (id) => {
+  const bucket = await BucketModel.findById(id);
+  return populateWithProcesses(bucket);
+};
 
 /**
  * @param {BucketModel} data Bucket data
@@ -24,10 +31,12 @@ const createBucket = (data) => {
 
 /**
  * @param {string} id Bucket ID
- * @param {BucketModel} data Bucket data
+ * @param {UpdateQuery<BucketModel>} data Bucket data
  * @return {Promise<BucketModel>}
  */
-const updateBucket = (id, data) => BucketModel.findByIdAndUpdate(id, data, { new: true });
+const updateBucket = async (id, data) => populateWithProcesses(
+  await BucketModel.findByIdAndUpdate(id, data, { new: true }),
+);
 
 /**
  * @return {Promise<{ deletedCount: 1 }>} Promise with deleted count property
@@ -35,11 +44,7 @@ const updateBucket = (id, data) => BucketModel.findByIdAndUpdate(id, data, { new
  */
 const deleteBucket = (_id) => BucketModel.deleteOne({ _id });
 
-const addVideo = (id, videoData) => BucketModel.findByIdAndUpdate(
-  id,
-  { $push: { videos: videoData } },
-  { new: true },
-);
+const addVideo = (id, videoData) => updateBucket(id, { $push: { videos: videoData } });
 
 module.exports = {
   getBucketsList,

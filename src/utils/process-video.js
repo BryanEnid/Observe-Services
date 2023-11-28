@@ -2,6 +2,8 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path;
 const ffmpeg = require('fluent-ffmpeg');
 
+const { logger } = require('./logger');
+
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
@@ -10,27 +12,64 @@ ffmpeg.setFfprobePath(ffprobePath);
  * @param {string} url
  * @return Promise<any>
  */
-const getVideoMetadata = (url) => {
-  return new Promise((res, rej) => {
-    ffmpeg.ffprobe(url, (err, metadata) => {
-      if (err) {
-        console.error(err);
-        return rej(err);
-      }
+const getVideoMetadata = (url) => new Promise((res, rej) => {
+  ffmpeg.ffprobe(url, (err, metadata) => {
+    if (err) {
+      logger().error(err);
+      return rej(err);
+    }
 
-      res(metadata);
-    });
+    return res(metadata);
   });
+});
+
+/**
+ * @param {Boolean} mainSound
+ * @param {Boolean} subSound
+ * @return {String[]}
+ */
+const getAudioOptions = (mainSound, subSound) => {
+  if (mainSound && subSound) {
+    return [
+      '-filter_complex amerge=inputs=2', // merge audio from 2 videos
+    ];
+  }
+  if (mainSound) {
+    return [
+      '-map 0:a', // use the Audio track of the main video
+      '-disposition:a:0 default', // make sure that 1st Audio track in the output will be played as the default track
+    ];
+  }
+  if (subSound) {
+    return [
+      '-map 1:a', // use the Audio track of the second video
+      '-disposition:a:1 default', // make sure that 2nd Audio track in the output will be played as the default track
+    ];
+  }
+
+  return [];
 };
 
 /**
  *
  * @param {string} backgroundVideoUrl
  * @param {string} subVideoUrl
+ * @param {{
+ *    rounded?: boolean,
+ *    mainSound?: boolean,
+ *    subSound?: boolean,
+ *    outputFileName: string,
+ *    onProgress: Function
+ *  }} opts
  * @return {Promise<string>}
  */
-const combineVideo = async (backgroundVideoUrl, subVideoUrl) => {
-  const outputFileName = `output-${Date.now()}.mp4`;
+const combineVideo = async (backgroundVideoUrl, subVideoUrl, opts) => {
+  const { outputFileName } = opts;
+  const rounded = typeof opts.rounded === 'boolean' ? opts.rounded : false;
+  const mainSound = typeof opts.mainSound === 'boolean' ? opts.mainSound : true;
+  const subSound = typeof opts.subSound === 'boolean' ? opts.subSound : true;
+  const { onProgress } = opts;
+
   let totalTime = 0;
   let width = 1920;
   let height = 1080;
@@ -49,45 +88,40 @@ const combineVideo = async (backgroundVideoUrl, subVideoUrl) => {
     ffmpeg(backgroundVideoUrl)
       .input(subVideoUrl)
       .on('codecData', data => {
-        console.log('=== codecData - data: ', data);
-        totalTime = parseInt(data.duration.replace(/:/g, ''))
+        totalTime = parseInt(data.duration.replace(/:/g, ''), 10);
       })
       .complexFilter([
-        // `[0:v]scale=${width}:${height}[0scaled]`,
         `[1:v]scale=${subX}:${subY}[1scaled]`,
-        `[1scaled]format=yuva444p,geq=lum='p(X,Y)':a='st(1,pow(min(W/2,H/2),2))+st(3,pow(X-(W/2),2)+pow(Y-(H/2),2));if(lte(ld(3),ld(1)),255,0)'[1rounded]`,
-        // `[1scaled]pad=w=${subVideoBorder * 2}+iw:h=${subVideoBorder * 2}+ih:x=${subVideoBorder}:y=${subVideoBorder}:color=white[1padded]`,
-        // `[0scaled]pad=${x}:${y}[0padded]`,
-        `[0:v][1rounded]overlay=shortest=1:x=${width - subX - subVideoPad}:y=${height - subY - subVideoPad}[output]`,
-
+        (rounded
+          ? '[1scaled]format=yuva444p,geq=lum=\'p(X,Y)\':a=\'st(1,pow(min(W/2,H/2),2))+st(3,pow(X-(W/2),2)+pow(Y-(H/2),2));if(lte(ld(3),ld(1)),255,0)\'[1transformed]'
+          : `[1scaled]pad=w=${subVideoBorder * 2}+iw:h=${subVideoBorder * 2}+ih:x=${subVideoBorder}:y=${subVideoBorder}:color=white[1transformed]`
+        ),
+        `[0:v][1transformed]overlay=shortest=1:x=${width - subX - subVideoPad}:y=${height - subY - subVideoPad}[output]`,
       ])
       .outputOptions([
         '-filter_complex_threads 1',
-        // '-c:a copy',
-        // '-map 0:a', // use the Audio track of the main video
-        // '-map 0:a:0', // use the Audio track of the main video
-        // '-disposition:a:0 default', // make sure that 1st Audio track in the output will be played as the default track
-        // '-map 1:a', // add the 2nd Audio track in the output
-        // '-map 1:a:0', // add the 2nd Audio track in the output
-        // '-c:a copy',
-        // '-c:a aac',
-        '-filter_complex amerge=inputs=2', // merge audio from 2 videos
+        ...getAudioOptions(mainSound, subSound),
         '-c:v libx264',
         '-preset ultrafast',
         '-shortest',
-        '-map [output]'
+        '-map [output]',
       ])
       .output(`./uploads/${outputFileName}`)
       .on('progress', (e) => {
-        const currentTime = parseInt(e.timemark.replace(/:/g, ''));
-        console.log('progress: ', (e?.percent || (currentTime * 100 / totalTime)).toFixed(2));
+        if (typeof onProgress === 'function') {
+          const currentTime = parseInt(e.timemark.replace(/:/g, ''), 10);
+          const percent = (e?.percent || ((currentTime * 100) / totalTime)).toFixed(2);
+
+          onProgress(percent >= 100 ? 99 : percent);
+        }
       })
       .on('error', (err) => {
-        console.log('=== error ===');
         rej(err);
       })
       .on('end', () => {
-        console.log('=== end ===');
+        if (typeof onProgress === 'function') {
+          onProgress(100);
+        }
         res(outputFileName);
       })
       .run();
