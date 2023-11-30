@@ -10,7 +10,7 @@ const s3 = new S3Client({
   region: config.get('fileStorage.s3Region'),
 });
 
-const getFileNameFromUrl = (url) => url.split('/').at(-1);
+const getFileNameFromUrl = (url) => url?.split('/').at(-1);
 
 const getFileUrl = (fileName) => `https://${config.get('fileStorage.s3Bucket')}.s3.amazonaws.com/${fileName}`;
 

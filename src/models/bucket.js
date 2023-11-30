@@ -1,5 +1,46 @@
 const mongoose = require('mongoose');
+
 const { VideoProcessSchema } = require('./video-process');
+const schemaOptions = require('./common/schema-options');
+
+const VideoSchema = new mongoose.Schema({
+  image: String,
+  videoUrl: String,
+  chosen: { type: Boolean, required: false },
+  selected: { type: Boolean, required: false },
+  process: { type: VideoProcessSchema, required: false },
+
+  questions: [{
+    creatorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    coords: { x: Number, y: Number },
+    text: String,
+    answer: {
+      coords: { x: Number, y: Number },
+      text: String,
+    },
+  }],
+  polls: [{
+    creatorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    coords: { x: String, y: String },
+    text: String,
+    options: [{ text: String }],
+    answer: {
+      coords: { x: String, y: String },
+      text: String,
+    },
+  }],
+  description: { type: String, required: false, default: '' },
+  pollQuestions: { type: Boolean, required: false, default: false },
+  views: { type: Number, required: false, default: 0 },
+  contributors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  videoType: { type: String, default: '' },
+}, schemaOptions);
 
 const BucketSchema = new mongoose.Schema({
   creatorId: {
@@ -18,26 +59,8 @@ const BucketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  videos: [{
-    image: String,
-    videoUrl: String,
-    chosen: { type: Boolean, required: false },
-    selected: { type: Boolean, required: false },
-    process: { type: VideoProcessSchema, required: false },
-  }],
-}, {
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    versionKey: false,
-    transform: (doc, ret) => {
-      // eslint-disable-next-line no-param-reassign
-      ret.id = ret._id;
-      // eslint-disable-next-line no-param-reassign
-      delete ret._id;
-    },
-  },
-});
+  videos: [VideoSchema],
+}, schemaOptions);
 
 const BucketModel = mongoose.model('Bucket', BucketSchema);
 

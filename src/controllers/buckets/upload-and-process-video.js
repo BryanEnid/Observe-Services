@@ -9,7 +9,7 @@ const { combineVideo } = require('../../utils/process-video');
 const { putObject, getFileUrl } = require('../../utils/s3');
 const { castToBoolean } = require('../../utils/boolean');
 const { logger } = require('../../utils/logger');
-const { addVideo } = require('../../db/buckets');
+const { addVideo, findBucket } = require('../../db/buckets');
 const { setProcess, removeProcess } = require('../../db/video-processes');
 
 const uploadAndProcessValidation = {
@@ -48,6 +48,7 @@ const removeFile = (filePath) => new Promise((res, rej) => {
 const uploadAndProcessRoute = async (req, res, next) => {
   const {
     files,
+    context: { userId },
     params: { id },
     body: data,
   } = req;
@@ -59,6 +60,16 @@ const uploadAndProcessRoute = async (req, res, next) => {
   const mainVideoPath = path.join(process.cwd(), 'uploads', mainVideo?.filename);
   const subVideoPath = path.join(process.cwd(), 'uploads', subVideo?.filename);
   const imagePath = path.join(process.cwd(), 'uploads', image?.filename);
+
+  const bucket = await findBucket({ _id: id, creatorId: userId });
+  if (!bucket) {
+    await Promise.all([
+      removeFile(mainVideoPath),
+      removeFile(subVideoPath),
+      removeFile(imagePath),
+    ]);
+    return next(Boom.notFound(`Bucket ${id} not found`));
+  }
 
   if (!mainVideo || !subVideo) {
     await Promise.all([

@@ -10,6 +10,10 @@ const getProcess = (id) => videoProcesses[id];
 const removeProcess = (id) => delete videoProcesses[id];
 
 const populateWithProcesses = (bucket) => {
+  if (!bucket?.videos?.length) {
+    return bucket;
+  }
+
   // eslint-disable-next-line no-param-reassign
   bucket.videos = bucket.videos.map(video => {
     if (video?.process && getProcess(video._id)) {

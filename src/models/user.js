@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const schemaOptions = require('./common/schema-options');
 
 const UserSchema = new mongoose.Schema({
   uid: String,
@@ -45,19 +46,7 @@ const UserSchema = new mongoose.Schema({
     }],
     validSince: String,
   },
-}, {
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    versionKey: false,
-    transform: (doc, ret) => {
-      // eslint-disable-next-line no-param-reassign
-      ret.id = ret._id;
-      // eslint-disable-next-line no-param-reassign
-      delete ret._id;
-    },
-  },
-});
+}, schemaOptions);
 
 const UserModel = mongoose.model('User', UserSchema);
 

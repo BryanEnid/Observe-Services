@@ -1,6 +1,6 @@
 const Boom = require('boom');
 
-const { deleteBucket, getBucketById } = require('../../db/buckets');
+const { deleteBucket, findBucket } = require('../../db/buckets');
 const { getFileNameFromUrl, deleteObject } = require('../../utils/s3');
 
 /**
@@ -10,9 +10,9 @@ const { getFileNameFromUrl, deleteObject } = require('../../utils/s3');
  * @return {Promise<void>}
  */
 const deleteBucketRoute = async (req, res, next) => {
-  const { params: { id } } = req;
+  const { context: { userId }, params: { id } } = req;
 
-  const bucket = await getBucketById(id);
+  const bucket = await findBucket({ _id: id, creatorId: userId });
   if (!bucket) {
     return next(Boom.notFound(`bucket ${id} not found`));
   }

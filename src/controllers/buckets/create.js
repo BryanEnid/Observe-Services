@@ -3,7 +3,6 @@ const { createBucket } = require('../../db/buckets');
 
 const createBucketValidation = {
   body: Joi.object({
-    creatorId: Joi.string(),
     name: Joi.string().required(),
     title: Joi.string().required(),
     description: Joi.string().required(),
@@ -13,6 +12,11 @@ const createBucketValidation = {
         videoUrl: Joi.string().required(),
         chosen: Joi.boolean().optional().allow(null),
         selected: Joi.boolean().optional().allow(null),
+        description: Joi.string().optional().allow(null, ''),
+        pollQuestions: Joi.boolean().optional(),
+        views: Joi.number().optional(),
+        contributors: Joi.array().items(Joi.string().optional()).optional(),
+        videoType: Joi.string().optional(),
       }),
     ).optional(),
   }).required(),
@@ -24,7 +28,12 @@ const createBucketValidation = {
  * @return {Promise<void>}
  */
 const createBucketRoute = async (req, res) => {
-  const bucket = await createBucket(req.body);
+  const { context: { userId }, body } = req;
+
+  const bucket = await createBucket({
+    ...body,
+    creatorId: userId,
+  });
   return res.send(bucket);
 };
 

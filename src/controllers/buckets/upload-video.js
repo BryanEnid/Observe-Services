@@ -1,7 +1,8 @@
 const Boom = require('boom');
 const { Joi } = require('celebrate');
 
-const { addVideo } = require('../../db/buckets');
+const { deleteObject } = require('../../utils/s3');
+const { addVideo, findBucket } = require('../../db/buckets');
 
 const uploadVideoValidation = {
   body: Joi.object({
@@ -21,6 +22,7 @@ const uploadVideoValidation = {
 const uploadVideoRoute = async (req, res, next) => {
   const {
     files,
+    context: { userId },
     params: { id },
     body: data,
   } = req;
@@ -29,6 +31,13 @@ const uploadVideoRoute = async (req, res, next) => {
   const image = files?.image?.[0];
   if (!video || !image) {
     return next(Boom.badData('Video or image are missed'));
+  }
+
+  const bucket = await findBucket({ _id: id, creatorId: userId });
+  if (!bucket) {
+    await deleteObject(video.key);
+    await deleteObject(image.key);
+    return next(Boom.notFound(`Bucket ${id} not found`));
   }
 
   const chosen = !!data.chosen && data.chosen === 'true';
