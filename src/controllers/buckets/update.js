@@ -3,6 +3,7 @@ const Boom = require('boom');
 
 const { findBucket, bulkUpdate } = require('../../db/buckets');
 const { deleteObject, getFileNameFromUrl } = require('../../utils/s3');
+const { getPartialObj } = require('../../utils/mongoose');
 
 const updateBucketValidation = {
   body: Joi.object({
@@ -81,13 +82,7 @@ const updateBucketRoute = async (req, res, next) => {
       updateOne: {
         filter: { _id: id, 'videos._id': video.id },
         update: {
-          $set: Object.keys(video).reduce((acc, key) => {
-            if (!['questions', 'polls', 'id'].includes(key)) {
-              acc[`videos.$.${key}`] = video[key];
-            }
-
-            return acc;
-          }, {}),
+          $set: getPartialObj(video, 'videos.$.', ['questions', 'polls', 'id']),
         },
       },
     })),

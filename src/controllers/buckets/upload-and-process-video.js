@@ -124,7 +124,7 @@ const uploadAndProcessRoute = async (req, res, next) => {
         }
 
         newVideo.process.percent = percent;
-        setProcess(newVideo.id, { percent: -percent });
+        setProcess(newVideo.id, { percent });
       },
     });
     resFilePath = path.join(process.cwd(), 'uploads', resFileName);

@@ -14,7 +14,7 @@ const authMiddleware = () => async (req, res, next) => {
     const id = authorization.replace('Bearer ', '').trim();
     user = await getUserById(id);
   } catch (e) {
-    logger.error(e);
+    logger().error(e);
   }
 
   if (!user) {
