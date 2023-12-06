@@ -13,7 +13,11 @@ node_modules/
 .env
 !.env.example
 
+# Docker temporal files
+database-data/
+
 # local config
 **/.DS_Store
 .idea
 .vscode
+

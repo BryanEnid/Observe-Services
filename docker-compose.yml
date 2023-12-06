@@ -1,0 +1,11 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: your-node-app-image:latest
+    container_name: node-app
+    restart: unless-stopped
+    ports:
+      - 3000:3000
