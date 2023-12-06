@@ -23,6 +23,7 @@ jobs:
 
       - name: Use Yarn
         run: |
+          yarn policies set-version 1.22.19
           echo -e "\e[36m Use Yarn - Yarn version: \e[0m $(yarn --version)" 
           yarn
 
@@ -34,4 +35,4 @@ jobs:
       - name: Linter
         run: |
           echo -e "\e[36m Linter \e[0m" 
-          yarn run style:all
+          yarn lint
