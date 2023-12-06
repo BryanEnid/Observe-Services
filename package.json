@@ -8,7 +8,8 @@
     "start:dev": "cross-env NODE_ENV=development NODE_PATH=src node src/index | pino-colada",
     "start": "cross-env NODE_ENV=production NODE_PATH=src node src/index",
     "lint": "eslint . --ext js --config .eslintrc.js --ignore-path ./.gitignore",
-    "lint-fix": "yarn lint -- --fix"
+    "lint-fix": "yarn lint -- --fix",
+    "container": "docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d"
   },
   "author": "",
   "license": "ISC",
