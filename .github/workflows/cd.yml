@@ -4,7 +4,7 @@ on:
   push: ['main']
 
 jobs:
-  build-deploy:
+  build:
     runs-on: self-hosted
 
     strategy:
@@ -23,10 +23,12 @@ jobs:
           cache: 'npm'
 
       - name: Use Yarn
-      - run: |
+        run: |
           yarn policies set-version 1.22.19
           echo -e "\e[36m Use Yarn - Yarn version: \e[0m $(yarn --version)" 
           yarn install --frozen-lockfile
-      - run: |
+
+      - name: Inject ENV
+        run: |
           touch .env
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
