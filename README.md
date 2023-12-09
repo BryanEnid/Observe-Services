@@ -18,3 +18,17 @@ Note: You have to provide the cert provided bv AWS "node-express-EC2.pem"
 ```terminal
   ssh -i "node-express-EC2.pem" ec2-user@ec2-54-160-233-67.compute-1.amazonaws.com
 ```
+
+## ACT - Testing actions locally
+
+Testing "ubuntu-latest" images
+
+```terminal
+act -j <JOB-NAME>
+```
+
+Testing "self-hosted" images
+
+```terminal
+act -j build -P self-hosted=catthehacker/ubuntu:full-latest
+```
