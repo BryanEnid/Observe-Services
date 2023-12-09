@@ -1,7 +1,9 @@
 name: CD
 
 on:
-  push: ['main']
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -10,8 +12,6 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        #
 
     steps:
       # Default steps
