@@ -9,7 +9,9 @@
     "start": "cross-env NODE_ENV=production NODE_PATH=src node src/index",
     "lint": "eslint . --ext js --config .eslintrc.js --ignore-path ./.gitignore",
     "lint-fix": "yarn lint -- --fix",
-    "container": "docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d"
+    "container": "docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d",
+    "act": "yarn exec act -- -P self-hosted=catthehacker/ubuntu:full-latest",
+    "act:list": "yarn exec act -- -l"
   },
   "author": "",
   "license": "ISC",
