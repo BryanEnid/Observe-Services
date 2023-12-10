@@ -2,8 +2,10 @@ const path = require('path');
 const dotenv = require('dotenv');
 
 // Needs to be loaded before config
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: path.join(__dirname, '../.env') });
+} else {
+  dotenv.config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) });
 }
 
 const config = require('config');
@@ -14,7 +16,7 @@ const { logger } = require('./utils/logger');
 const port = parseInt(config.get('http.port'), 10);
 const host = config.get('http.host');
 
-app().then(expressApp => {
+app().then((expressApp) => {
   swagger(expressApp);
 
   expressApp.listen(port, host, () => {
