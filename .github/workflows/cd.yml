@@ -32,3 +32,7 @@ jobs:
         run: |
           touch .env
           echo "${{ secrets.PROD_ENV_FILE }}" > .env
+
+      - name: Deploy
+        run: |
+          pm2 restart all
