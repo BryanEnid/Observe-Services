@@ -17,9 +17,9 @@ const findTool = async (filterQuery) => ToolModel.findOne(filterQuery);
  * @return {Promise<ToolModel>}
  */
 const createTool = (data) => {
-  const bucket = new ToolModel(data);
+  const tool = new ToolModel(data);
 
-  return bucket.save();
+  return tool.save();
 };
 
 /**

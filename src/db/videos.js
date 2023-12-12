@@ -17,9 +17,9 @@ const findVideo = async (filterQuery) => VideoModel.findOne(filterQuery);
  * @return {Promise<VideoModel>}
  */
 const createVideo = (data) => {
-  const bucket = new VideoModel(data);
+  const video = new VideoModel(data);
 
-  return bucket.save();
+  return video.save();
 };
 
 /**

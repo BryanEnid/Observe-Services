@@ -3,7 +3,7 @@ const { Joi } = require('celebrate');
 
 const { logger } = require('../../../utils/logger');
 const { createVideo } = require('../../../db/videos');
-const { getYoutubeVideoMeta } = require('../../../services/videos-service');
+const { getYoutubeVideoMeta } = require('../../../services/videos');
 
 const createVideoValidation = {
   body: Joi.object({

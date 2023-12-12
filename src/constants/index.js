@@ -5,6 +5,11 @@ const VIDEO_PROCESSING_STATUS = {
   DONE: 'DONE',
 };
 
+const SAVE_FOR_LATER = {
+  BOOKS: 'books',
+};
+
 module.exports = {
   VIDEO_PROCESSING_STATUS,
+  SAVE_FOR_LATER,
 };

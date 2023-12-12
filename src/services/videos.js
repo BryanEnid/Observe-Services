@@ -11,8 +11,8 @@ const getYoutubeVideoMeta = async (url) => {
 
   const title = dom.window.document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '';
   const description = dom.window.document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '';
-  const duration = dom.window.document.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
-  const preview = dom.window.document.querySelector('meta[itemProp="duration"]')?.getAttribute('content') || '';
+  const preview = dom.window.document.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
+  const duration = dom.window.document.querySelector('meta[itemProp="duration"]')?.getAttribute('content') || '';
 
   return {
     title, description, duration, preview,

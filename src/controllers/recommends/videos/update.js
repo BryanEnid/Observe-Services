@@ -2,7 +2,7 @@ const { Joi } = require('celebrate');
 const Boom = require('boom');
 
 const { logger } = require('../../../utils/logger');
-const { getYoutubeVideoMeta } = require('../../../services/videos-service');
+const { getYoutubeVideoMeta } = require('../../../services/videos');
 const { findVideo, updateVideo } = require('../../../db/videos');
 
 const updateVideoValidation = {
