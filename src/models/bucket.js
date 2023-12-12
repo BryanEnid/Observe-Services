@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { VideoProcessSchema } = require('./video-process');
 const schemaOptions = require('./common/schema-options');
 
-const VideoSchema = new mongoose.Schema({
+const BucketVideoSchema = new mongoose.Schema({
   image: String,
   videoUrl: String,
   chosen: { type: Boolean, required: false },
@@ -59,7 +59,7 @@ const BucketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  videos: [VideoSchema],
+  videos: [BucketVideoSchema],
 }, schemaOptions);
 
 const BucketModel = mongoose.model('Bucket', BucketSchema);

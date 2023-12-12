@@ -56,8 +56,7 @@ const videoPollObject = {
   createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
   updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
 };
-
-const videoCreateInput = {
+const bucketVideoCreateInput = {
   image: { type: 'string', example: 'http://url' },
   videoUrl: { type: 'string', example: 'http://url' },
   chosen: { type: 'boolean', example: false },
@@ -69,9 +68,9 @@ const videoCreateInput = {
   },
   videoType: { type: 'string', example: 'VR' },
 };
-const videoObject = {
+const bucketVideoObject = {
   id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
-  ...videoCreateInput,
+  ...bucketVideoCreateInput,
   questions: {
     type: 'array',
     items: {
@@ -119,7 +118,7 @@ const bucketCreateInput = {
     type: 'array',
     items: {
       type: 'object',
-      properties: { ...videoCreateInput },
+      properties: { ...bucketVideoCreateInput },
     },
   },
 };
@@ -131,7 +130,7 @@ const bucketObject = {
     type: 'array',
     items: {
       type: 'object',
-      properties: { ...videoObject },
+      properties: { ...bucketVideoObject },
     },
   },
   createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
@@ -319,6 +318,124 @@ const profileObject = {
   updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
 };
 
+const toolCreateInput = {
+  title: { type: 'string' },
+  description: { type: 'string' },
+  category: { type: 'string' },
+  picture: { type: 'string', example: 'https://image.url' },
+};
+const toolObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...toolCreateInput,
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const peopleCreateInput = {
+  name: { type: 'string' },
+  picture: { type: 'string', example: 'https://image.url' },
+};
+const peopleObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...peopleCreateInput,
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const videoCreateInput = {
+  url: { type: 'string', example: 'https://video.url' },
+};
+const videoObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  title: { type: 'string' },
+  description: { type: 'string' },
+  duration: { type: 'string', example: 'PT10M30S' },
+  videoUrl: { type: 'string' },
+  preview: { type: 'string', example: 'https://image.url' },
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const articleCreateInput = {
+  url: { type: 'string', example: 'https://article.url' },
+};
+const articleObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  url: { type: 'string' },
+  title: { type: 'string' },
+  description: { type: 'string' },
+  readingTime: { type: 'string', example: 'PT10M30S' },
+  picture: { type: 'string', example: 'https://image.url' },
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const bookPhotoCreateInput = {
+  description: { type: 'string' },
+  imgUrl: { type: 'string', example: 'https://image.url' },
+};
+const bookPhotoObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...bookPhotoCreateInput,
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+const bookCreateInput = {
+  title: { type: 'string' },
+  description: { type: 'string' },
+  readingTime: { type: 'string', example: 'PT1H30M' },
+  photos: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: { ...bookPhotoCreateInput },
+    },
+  },
+};
+const bookObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...bookCreateInput,
+  photos: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: { ...bookPhotoObject },
+    },
+  },
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const quotCreateInput = {
+  text: { type: 'string' },
+};
+const quotObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  creatorId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...quotCreateInput,
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
+const saveForLaterCreateInput = {
+  books: {
+    type: 'array',
+    items: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  },
+};
+const saveForLaterObject = {
+  id: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  userId: { type: 'string', example: '655b1c6ce664a8d355324cb8' },
+  ...saveForLaterCreateInput,
+  createdAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+  updatedAt: { type: 'string', example: '2023-11-21T10:47:55.753Z' },
+};
+
 const components = {
   securitySchemes: {
     BearerAuth: {
@@ -405,6 +522,69 @@ const components = {
     AttachmentCreateInput: {
       type: 'object',
       properties: { ...attachmentCreateInput },
+    },
+    Tool: {
+      type: 'object',
+      properties: { ...toolObject },
+    },
+    ToolCreateInput: {
+      type: 'object',
+      properties: { ...toolCreateInput },
+    },
+    People: {
+      type: 'object',
+      properties: { ...peopleObject },
+    },
+    PeopleCreateInput: {
+      type: 'object',
+      properties: { ...peopleCreateInput },
+    },
+    Video: {
+      type: 'object',
+      properties: { ...videoObject },
+    },
+    VideoCreateInput: {
+      type: 'object',
+      properties: { ...videoCreateInput },
+    },
+    Article: {
+      type: 'object',
+      properties: { ...articleObject },
+    },
+    ArticleCreateInput: {
+      type: 'object',
+      properties: { ...articleCreateInput },
+    },
+    BookPhoto: {
+      properties: { ...bookPhotoObject },
+    },
+    BookPhotoCreateInput: {
+      type: 'object',
+      properties: { ...bookPhotoCreateInput },
+    },
+    Book: {
+      type: 'object',
+      properties: { ...bookObject },
+    },
+    BookCreateInput: {
+      type: 'object',
+      properties: { ...bookCreateInput },
+    },
+    Quot: {
+      type: 'object',
+      properties: { ...quotObject },
+    },
+    QuotCreateInput: {
+      type: 'object',
+      properties: { ...quotCreateInput },
+    },
+    SaveForLater: {
+      type: 'object',
+      properties: { ...saveForLaterObject },
+    },
+    SaveForLaterCreateInput: {
+      type: 'object',
+      properties: { ...saveForLaterCreateInput },
     },
   },
 };
