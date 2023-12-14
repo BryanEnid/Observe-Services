@@ -1,6 +1,7 @@
 const Boom = require('boom');
+const { Types } = require('mongoose');
 
-const { getUserById } = require('../db/users');
+const { findUser } = require('../db/users');
 const { logger } = require('../utils/logger');
 
 const authMiddleware = () => async (req, res, next) => {
@@ -12,7 +13,14 @@ const authMiddleware = () => async (req, res, next) => {
   let user;
   try {
     const id = authorization.replace('Bearer ', '').trim();
-    user = await getUserById(id);
+    const isObjectId = Types.ObjectId.isValid(id);
+
+    user = await findUser({
+      $or: [
+        ...(isObjectId ? [{ _id: id }] : []),
+        { uid: id },
+      ],
+    });
   } catch (e) {
     logger().error(e);
   }

@@ -1,9 +1,9 @@
 const { Joi } = require('celebrate');
-const { createUser } = require('../../db/users');
+const { createUser, findUser, updateUser } = require('../../db/users');
 
 const createUserValidation = {
   body: Joi.object({
-    uid: Joi.string(),
+    uid: Joi.string().required(),
     email: Joi.string().required(),
     name: Joi.string().required(),
     photoURL: Joi.string().required(),
@@ -48,6 +48,14 @@ const createUserValidation = {
  * @return {Promise<void>}
  */
 const createUserRoute = async (req, res) => {
+  const { body } = req;
+
+  const existingUser = await findUser({ uid: body.uid });
+  if (existingUser?.id) {
+    const user = await updateUser(existingUser.id, req.body);
+    return res.send(user);
+  }
+
   const user = await createUser(req.body);
   return res.send(user);
 };
