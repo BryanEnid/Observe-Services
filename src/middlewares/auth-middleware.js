@@ -1,6 +1,6 @@
 const Boom = require('boom');
-const { Types } = require('mongoose');
 
+const firebaseAdmin = require('../firebase');
 const { findUser } = require('../db/users');
 const { logger } = require('../utils/logger');
 
@@ -12,15 +12,10 @@ const authMiddleware = () => async (req, res, next) => {
 
   let user;
   try {
-    const id = authorization.replace('Bearer ', '').trim();
-    const isObjectId = Types.ObjectId.isValid(id);
+    const token = authorization.replace('Bearer ', '').trim();
+    const { uid } = await firebaseAdmin.auth().verifyIdToken(token);
 
-    user = await findUser({
-      $or: [
-        ...(isObjectId ? [{ _id: id }] : []),
-        { uid: id },
-      ],
-    });
+    user = await findUser({ uid });
   } catch (e) {
     logger().error(e);
   }
