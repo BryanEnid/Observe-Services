@@ -1,4 +1,5 @@
 const Boom = require('boom');
+// const { jwtDecode } = require('jwt-decode');
 
 const { getUserById } = require('../db/users');
 const { logger } = require('../utils/logger');
