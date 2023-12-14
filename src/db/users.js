@@ -9,6 +9,12 @@ const getUsersList = () => UserModel.find();
 const getUserById = (id) => UserModel.findById(id);
 
 /**
+ * @param {FilterQuery<UserModel>} filterQuery filter options
+ * @return {Promise<UserModel>}
+ */
+const findUser = async (filterQuery) => UserModel.findOne(filterQuery);
+
+/**
  * @param {UserModel} data User data
  * @return {Promise<UserSchema>}
  */
@@ -32,5 +38,5 @@ const updateUser = (id, data) => UserModel.findByIdAndUpdate(id, data, { new: tr
 const deleteUser = (_id) => UserModel.deleteOne({ _id });
 
 module.exports = {
-  getUsersList, getUserById, createUser, updateUser, deleteUser,
+  getUsersList, getUserById, findUser, createUser, updateUser, deleteUser,
 };
