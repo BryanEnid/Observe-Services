@@ -114,6 +114,7 @@ const bucketCreateInput = {
   name: { type: 'string', example: 'My Bucket' },
   title: { type: 'string', example: 'My Bucket Title' },
   description: { type: 'string', example: 'My Bucket Description' },
+  category: { type: 'string', example: 'Tools Category' },
   videos: {
     type: 'array',
     items: {

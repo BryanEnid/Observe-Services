@@ -12,7 +12,7 @@ const updateBucketValidation = {
     name: Joi.string().optional(),
     title: Joi.string().optional(),
     description: Joi.string().optional(),
-
+    category: Joi.string().optional(),
     videos: Joi.array().items(
       Joi.object({
         id: Joi.string().required(),
