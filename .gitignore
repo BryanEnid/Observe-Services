@@ -11,7 +11,12 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.local.*
 !.env.example
+
+# Config
+config/development.json
 
 # Docker temporal files
 database-data/

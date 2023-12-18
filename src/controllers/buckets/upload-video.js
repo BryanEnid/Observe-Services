@@ -50,7 +50,7 @@ const uploadVideoRoute = async (req, res, next) => {
     videoUrl: video.location,
   });
   const newVideo = updateBucket.videos.find(
-    ({ image: imageUrl, videoUrl }) => imageUrl === image.location && videoUrl === video.location,
+    ({ image: imageUrl, videoUrl }) => imageUrl === image.location && videoUrl === video.location
   );
 
   return res.status(200).send(newVideo);
