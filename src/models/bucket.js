@@ -9,7 +9,6 @@ const BucketVideoSchema = new mongoose.Schema({
   chosen: { type: Boolean, required: false },
   selected: { type: Boolean, required: false },
   process: { type: VideoProcessSchema, required: false },
-
   questions: [{
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -56,6 +55,10 @@ const BucketSchema = new mongoose.Schema({
     required: true,
   },
   description: {
+    type: String,
+    required: true,
+  },
+  category: {
     type: String,
     required: true,
   },
