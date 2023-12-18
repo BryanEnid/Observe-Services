@@ -1,5 +1,5 @@
 const Boom = require('boom');
-const { getUserById } = require('../../db/users');
+const { findUser } = require('../../db/users');
 
 /**
  * @param req: Request
@@ -8,9 +8,12 @@ const { getUserById } = require('../../db/users');
  * @return {Promise<void>}
  */
 const getUserByIdRoute = async (req, res, next) => {
-  const { params: { id } } = req;
+  const {
+    params: { id },
+  } = req;
 
-  const user = await getUserById(id);
+  // findById
+  const user = await findUser({ uid: id });
   if (!user) {
     return next(Boom.notFound(`User ${id} not found`));
   }
