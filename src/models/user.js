@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  provider: {
+    type: String,
+    required: false,
+  },
   providerData: [{
     displayName: String,
     email: String,

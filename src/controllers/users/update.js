@@ -9,6 +9,7 @@ const updateUserValidation = {
     name: Joi.string().optional(),
     photoURL: Joi.string().optional(),
     username: Joi.string().optional(),
+    provider: Joi.string().optional(),
     providerData: Joi.array().items(
       Joi.object({
         displayName: Joi.string().optional(),

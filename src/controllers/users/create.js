@@ -8,6 +8,7 @@ const createUserValidation = {
     name: Joi.string().required(),
     photoURL: Joi.string().required(),
     username: Joi.string().required(),
+    provider: Joi.string.optional(),
     providerData: Joi.array().items(
       Joi.object({
         displayName: Joi.string().required(),
