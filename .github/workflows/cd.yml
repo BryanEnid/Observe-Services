@@ -31,12 +31,12 @@ jobs:
       - name: Inject ENV
         run: |
           touch .env
-          echo "${{ secrets.PROD_ENV_FILE }}" > .env
+          echo '${{ secrets.PROD_ENV_FILE }}' > .env
 
       - name: Add PROD config
         run: |
           touch production.json
-          echo "${{ secrets.PROD_CONFIG_FILE }}" > ./config/production.json
+          echo '${{ secrets.PROD_CONFIG_FILE }}' > ./config/production.json
 
       - name: Deploy
         run: |
