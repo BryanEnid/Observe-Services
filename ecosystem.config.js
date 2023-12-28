@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'Observe',
       script: './src/index.js',
-      env_production: {
+      env: {
         NODE_ENV: 'production',
       },
       env_development: {

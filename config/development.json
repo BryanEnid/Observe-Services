@@ -5,5 +5,18 @@
   "cors": ["http://localhost:3000", "http://localhost:3300", "http://localhost:5173", "https://localhost:5173"],
   "http": {
     "host": "127.0.0.1"
+  },
+  "firebase": {
+    "type": "service_account",
+    "project_id": "observe-93479",
+    "private_key_id": "feeb566d532a02e2ed06afcd7edb03e556b0fd64",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC/CImYhveoD1sp\noclWqam7JS8qVqb9uiQ6aB/Gp94Co//EDa9gA4gx81hualdrWynkuH1UmBPv+/pf\n3H9XmJgFt0EAYiDGvW+P5Z2TrbgN4uHRCpy9r344/iG1lsrgkbmI9OZMp91OKqiG\nLzJj+8QwKrGFKybt1OfTNLDO0Is5WyK55gxCM+Iu9Q1FldkqcAa/t/19iAWgnwkc\nUzib75KJWyryNgl8tiJTBk0ZFX8nOKjBPCAlFFKhgBoItcSqMPogz0No2lMp8Gkg\n4/WxiGedBW2SjupU0dlg29lJYYWhG2WB8LXHmAVQFZJSMUGPqF2AwL0fukGCwj6U\np+zOmTQDAgMBAAECggEAFWTT4AiReLlLiNSNE08J6qMF7rRonDa58u6RTHKlSt9p\n999eeh67JHjvuOHg6214uhwtMQmdBf3OsuijPECjGdTFi1DyAb/aXB+nb4//clKr\n3njVR+r89E4FoWwDSXYYdK2UkxYjkyr01542gvsBpDFL0zGbePwkgENA39B8Hw6T\nqxjtn/H5ye8UXoLffQOPNmwSoQzSw+lM5+O26PXRGhFaQVnqHq8gVv0kjmO8q/We\nua81Qx7rXw0VJH5RBBUcdGKkhnj0R2QLwEYowUa5f2iIbWv6ocII3jAamSqSvJ/R\n+u7M5MdM2K6JZFLx0MXGsHheWXE6Ilk8xjGJvcPoPQKBgQDrMqRL6FiNQPYizUrP\nsj4um6Y3pWFhu3cVogOC3xSLW40+vzIAmWAlpTpiIV8yYgIl2B+lyj0LgSPNLE2G\npnTRv9CQOUqj30ER/SsNLYzI+l2WAQDgxDaLWCQ27SMPWj/I1y9CuXMz1vNcKTkW\nYwe9TbDbi4CrbLtqH4xN3ND1nQKBgQDP7ewLRvLMNEQAi62FH0jW8C0DGznz3cJe\nwuRW7a3orju2fqn+Xku/vWxc+JLph9TyPHVwzcNueMhH/ho7u8YLeys1qr1nQMSK\n1m6PoHILWdfTLOCu3oWxQltrak/e0m1e8D5ph8NFzD0eZPNrjgamgQ0Y2kLGQJoW\nhao2LCpuHwKBgGd9WAfCi7xTujokBOgQ8QWHHYNctNXRLBwLtunOCPcs6KCUdocG\n9eR6qI7nSkEcGP/X8kz8CRJX143/EXnPIpXshfQAEZS7tqEYuenJgioo6CcJ9/3u\nuGVl+kFk5Mlrl6di7/u3KDbGPTzvMpxkJNKqLcjcwFgttuWCTjUwlY2NAoGAe5r1\nOhL4HNppHmXqRfu+AkAOkg0qW0UV2d1DfkWWn36L8sXDanpFz3rcozwFoZvkxAea\nzO8U4WQds2Zj0+ShK4wRuLqCE5JWBC7K1MjNYuAKw/emrW2Mzj4jOGyfhFdVOx3Y\nDEXvmFt8bcgXSHXKkEqhLYf6L/6RWxgkgkWpB4MCgYAj53RzoYrIu0WTO4IJaCwX\nVJNG7+BOiafCwUtS6DFFw38Q3H9pM4fp3mW9Ixd+bXN3TKVU6i8Nmg/tWPvrKVzy\nvfZuq2+/h0nBH5Igud+GFzL5GnXTAfYcpDqjF28Clm/rAIkhZYVHZMPW1krLmEBF\n6vV9gkmEpq3rQ+RSOgemxA==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-gph22@observe-93479.iam.gserviceaccount.com",
+    "client_id": "101310373068471019062",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-gph22%40observe-93479.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
   }
 }
