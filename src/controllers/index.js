@@ -13,6 +13,7 @@ const booksController = require('./recommends/books');
 const saveForLaterController = require('./recommends/save-for-later');
 const quotesController = require('./recommends/quotes');
 const articlesController = require('./recommends/articles');
+const questionsController = require('./questions');
 
 const apiController = Router();
 
@@ -29,5 +30,6 @@ apiController.use('/books', booksController);
 apiController.use('/save-for-later', saveForLaterController);
 apiController.use('/quotes', quotesController);
 apiController.use('/articles', articlesController);
+apiController.use('/questions', questionsController);
 
 module.exports = apiController;
