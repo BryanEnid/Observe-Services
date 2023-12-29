@@ -9,7 +9,7 @@ const { ProfileModel } = require('../models');
 const getProfileById = (id) => ProfileModel.findById(id);
 
 /**
- * @param {FilterQuery} filterQuery filter options
+ * @param {FilterQuery<ProfileModel>} filterQuery filter options
  * @return {Promise<ProfileModel>}
  */
 const findProfile = (filterQuery) => ProfileModel.findOne(filterQuery);
