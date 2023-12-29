@@ -11,8 +11,10 @@ const { deleteUserRoute } = require('./delete');
 
 const router = express.Router();
 
-router.get('/', authMiddleware(), errorWrapper(getUsersListRoute));
-router.get('/:id', authMiddleware(), errorWrapper(getUserByIdRoute));
+// router.get('/', authMiddleware(), errorWrapper(getUsersListRoute));
+router.get('/', errorWrapper(getUsersListRoute));
+// router.get('/:id', authMiddleware(), errorWrapper(getUserByIdRoute));
+router.get('/:id', errorWrapper(getUserByIdRoute));
 router.post('/', express.json(), celebrate(createUserValidation), errorWrapper(createUserRoute));
 router.put('/:id', authMiddleware(), express.json(), celebrate(updateUserValidation), errorWrapper(updateUserRoute));
 router.delete('/:id', authMiddleware(), errorWrapper(deleteUserRoute));
