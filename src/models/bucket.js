@@ -9,18 +9,6 @@ const BucketVideoSchema = new mongoose.Schema({
   chosen: { type: Boolean, required: false },
   selected: { type: Boolean, required: false },
   process: { type: VideoProcessSchema, required: false },
-  questions: [{
-    creatorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    coords: { x: Number, y: Number },
-    text: String,
-    answer: {
-      coords: { x: Number, y: Number },
-      text: String,
-    },
-  }],
   polls: [{
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,

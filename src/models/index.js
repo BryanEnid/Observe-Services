@@ -8,6 +8,7 @@ const VideoModel = require('./video');
 const SaveForLaterModel = require('./save-for-later');
 const QuotModel = require('./quot');
 const ArticleModel = require('./article');
+const QuestionModel = require('./question');
 
 module.exports = {
   UserModel,
@@ -20,4 +21,5 @@ module.exports = {
   SaveForLaterModel,
   QuotModel,
   ArticleModel,
+  QuestionModel,
 };
