@@ -43,7 +43,7 @@ const BucketSchema = new mongoose.Schema({
     required: true,
   },
   description: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
     required: true,
   },
   category: {

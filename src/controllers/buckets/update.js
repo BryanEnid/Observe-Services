@@ -11,7 +11,7 @@ const updateBucketValidation = {
     creatorId: Joi.string().optional(),
     name: Joi.string().optional(),
     title: Joi.string().optional(),
-    description: Joi.string().optional(),
+    description: Joi.any().optional(),
     category: Joi.string().optional(),
     videos: Joi.array().items(
       Joi.object({

@@ -5,7 +5,7 @@ const createBucketValidation = {
   body: Joi.object({
     name: Joi.string().required(),
     title: Joi.string().optional().allow(null),
-    description: Joi.string().required(),
+    description: Joi.any().required(),
     category: Joi.string().required(),
     videos: Joi.array()
       .items(
