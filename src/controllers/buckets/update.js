@@ -43,7 +43,9 @@ const updateBucketRoute = async (req, res, next) => {
   const {
     context: { userId },
     params: { id },
-    body: { id: _id, creatorId, videos, ...data },
+    body: {
+      id: _id, creatorId, videos, ...data
+    },
   } = req;
 
   const bucket = await findBucket({ _id: id, creatorId: userId });
