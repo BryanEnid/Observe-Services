@@ -4,9 +4,9 @@ const { createBucket } = require('../../db/buckets');
 const createBucketValidation = {
   body: Joi.object({
     name: Joi.string().required(),
-    title: Joi.string().optional().allow(null),
+    title: Joi.string().optional().allow(null, ''),
     description: Joi.any().required(),
-    category: Joi.string().required(),
+    category: Joi.string().optional(),
     videos: Joi.array()
       .items(
         Joi.object({
