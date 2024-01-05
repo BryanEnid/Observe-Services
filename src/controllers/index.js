@@ -14,6 +14,7 @@ const saveForLaterController = require('./recommends/save-for-later');
 const quotesController = require('./recommends/quotes');
 const articlesController = require('./recommends/articles');
 const questionsController = require('./questions');
+const linkedinAuthController = require('./linkedin');
 
 const apiController = Router();
 
@@ -31,5 +32,6 @@ apiController.use('/save-for-later', saveForLaterController);
 apiController.use('/quotes', quotesController);
 apiController.use('/articles', articlesController);
 apiController.use('/questions', questionsController);
+apiController.use('/auth/linkedin', linkedinAuthController);
 
 module.exports = apiController;

@@ -27,5 +27,11 @@
 		"auth_provider_x509_cert_url": "FIREBASE_AUTH_PROVIDER_CERT_URL",
 		"client_x509_cert_url": "FIREBASE_CLIENT_CERT_URL",
 		"universe_domain": "FIREBASE_UNIVERSE_DOMAIN"
+	},
+	"linkedin": {
+		"clientId": "LINKED_IN_CLIENT_ID",
+		"clientSecret": "LINKED_IN_CLIENT_SECRET",
+		"redirectUrl": "LINKED_IN_REDIRECT_URL",
+		"apiUrl": "LINKED_IN_API_URL"
 	}
 }
