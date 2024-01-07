@@ -1,4 +1,4 @@
-name: CD
+name: DEVELOPMENT
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, development-1]
 
     strategy:
       matrix:
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
 
       - name: Use Yarn
         run: |
@@ -28,11 +28,11 @@ jobs:
           echo -e "\e[36m Use Yarn - Yarn version: \e[0m $(yarn --version)" 
           yarn install --frozen-lockfile
 
-      - name: Inject Production enviroment files
+      - name: Inject Production environment files
         run: |
-          echo '${{ secrets.PROD_ENV_FILE }}' > .env
-          echo '${{ secrets.PROD_CONFIG_FILE }}' > ./config/production.json
+          echo '${{ secrets.DEV_ENV_FILE }}' > .env
+          echo '${{ secrets.DEV_CONFIG_FILE }}' > ./config/development.json
 
       - name: Deploy
         run: |
-          pm2 restart all
+          pm2 restart all --env development
