@@ -1,0 +1,38 @@
+name: PRODUCTION
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: [self-hosted, production-1]
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      # Default steps
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Use Yarn
+        run: |
+          yarn policies set-version 1.22.19
+          echo -e "\e[36m Use Yarn - Yarn version: \e[0m $(yarn --version)" 
+          yarn install --frozen-lockfile
+
+      - name: Inject Production environment files
+        run: |
+          echo '${{ secrets.PROD_ENV_FILE }}' > .env
+          echo '${{ secrets.PROD_CONFIG_FILE }}' > ./config/production.json
+
+      - name: Deploy
+        run: |
+          pm2 restart all --env production
