@@ -19,8 +19,8 @@ const getBucketsListRoute = async (req, res) => {
     options = { creatorId: query.ownerId };
   }
 
-  const user = await getBucketsList(options);
-  return res.send(user);
+  const buckets = await getBucketsList(options, { sort: { createdAt: -1 } });
+  return res.send(buckets);
 };
 
 module.exports = { getBucketsListRoute, listRouteValidator };

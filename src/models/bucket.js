@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+const { DEFAULT_BUCKET_CATEGORY } = require('../constants');
 const { VideoProcessSchema } = require('./video-process');
 const schemaOptions = require('./common/schema-options');
 
@@ -53,7 +54,7 @@ const BucketSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      default: 'Unlisted',
+      default: DEFAULT_BUCKET_CATEGORY,
       // required: true,
     },
     videos: [BucketVideoSchema],

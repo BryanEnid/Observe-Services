@@ -10,18 +10,11 @@ const { getBucketsListRoute, listRouteValidator } = require('./list');
 const { createBucketRoute, createBucketValidation } = require('./create');
 const { updateBucketRoute, updateBucketValidation } = require('./update');
 const { deleteBucketRoute } = require('./delete');
+const { deleteBucketsCategoryRoute, deleteBucketsCategoryValidator } = require('./delete-category');
+const { updateBucketsCategoryRoute, updateBucketsCategoryValidator } = require('./update-category');
 
 const { uploadVideoRoute } = require('./upload-video');
 const { uploadAndProcessRoute, uploadAndProcessValidation } = require('./upload-and-process-video');
-
-const { getQuestionsListRoute } = require('./questions/list-questions');
-const { createQuestionRoute, createQuestionValidation } = require('./questions/create-question');
-const { updateQuestionRoute, updateQuestionValidation } = require('./questions/update-question');
-const { deleteQuestionRoute } = require('./questions/delete-question');
-
-const { createAnswerRoute, createAnswerValidation } = require('./questions/create-answer');
-const { updateAnswerRoute, updateAnswerValidation } = require('./questions/update-answer');
-const { deleteAnswerRoute } = require('./questions/delete-answer');
 
 const { getPollsListRoute } = require('./polls/list');
 const { createPollRoute, createPollValidation } = require('./polls/create');
@@ -80,38 +73,19 @@ router.post(
   errorWrapper(uploadAndProcessRoute)
 );
 
-router.get('/:id/videos/:videoId/questions', errorWrapper(getQuestionsListRoute));
-router.post(
-  '/:id/videos/:videoId/questions',
-  authMiddleware(),
-  express.json(),
-  celebrate(createQuestionValidation, defaultSchemaOptions),
-  errorWrapper(createQuestionRoute)
-);
 router.put(
-  '/:id/videos/:videoId/questions/:questionId',
+  '/categories/:category',
   authMiddleware(),
   express.json(),
-  celebrate(updateQuestionValidation, defaultSchemaOptions),
-  errorWrapper(updateQuestionRoute)
+  celebrate(updateBucketsCategoryValidator),
+  errorWrapper(updateBucketsCategoryRoute)
 );
-router.delete('/:id/videos/:videoId/questions/:questionId', authMiddleware(), errorWrapper(deleteQuestionRoute));
-
-router.post(
-  '/:id/videos/:videoId/questions/:questionId/answer',
+router.delete(
+  '/categories/:category',
   authMiddleware(),
-  express.json(),
-  celebrate(createAnswerValidation),
-  errorWrapper(createAnswerRoute)
+  celebrate(deleteBucketsCategoryValidator),
+  errorWrapper(deleteBucketsCategoryRoute)
 );
-router.put(
-  '/:id/videos/:videoId/questions/:questionId/answer',
-  authMiddleware(),
-  express.json(),
-  celebrate(updateAnswerValidation),
-  errorWrapper(updateAnswerRoute)
-);
-router.delete('/:id/videos/:videoId/questions/:questionId/answer', authMiddleware(), errorWrapper(deleteAnswerRoute));
 
 router.get('/:id/videos/:videoId/polls', errorWrapper(getPollsListRoute));
 router.post(

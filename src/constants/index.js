@@ -9,7 +9,10 @@ const SAVE_FOR_LATER = {
   BOOKS: 'books',
 };
 
+const DEFAULT_BUCKET_CATEGORY = 'Unlisted';
+
 module.exports = {
+  DEFAULT_BUCKET_CATEGORY,
   VIDEO_PROCESSING_STATUS,
   SAVE_FOR_LATER,
 };

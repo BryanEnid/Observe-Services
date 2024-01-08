@@ -2,11 +2,12 @@ const { BucketModel } = require('../models');
 const { populateWithProcesses } = require('./video-processes');
 
 /**
- * @param {{ creatorId?: string }} query Bucket ID
+ * @param {FilterQuery<BucketModel>} query Bucket ID
+ * @param {QueryOptions?} opts Query options
  * @return {Promise<BucketModel[]>}
  */
-const getBucketsList = async (query) => {
-  const buckets = await BucketModel.find(query);
+const getBucketsList = async (query, opts) => {
+  const buckets = await BucketModel.find(query, undefined, opts);
   return buckets.map(populateWithProcesses);
 };
 
@@ -57,6 +58,21 @@ const updateBucket = async (filter, data, opts) => populateWithProcesses(
   await BucketModel.findOneAndUpdate(filter, data, { new: true, ...opts }),
 );
 
+/**
+ * @param {FilterQuery} filter filter options
+ * @param {UpdateQuery} data Bucket data
+ * @param {QueryOptions?} opts
+ * @return {Promise<
+ *  acknowledged: Boolean;
+ *  modifiedCount: Number;
+ *  upsertedCount: Number;
+ *  matchedCount: Number;
+ * >}
+ */
+const updateBuckets = async (filter, data, opts) => populateWithProcesses(
+  await BucketModel.updateMany(filter, data, { new: true, ...opts }),
+);
+
 const bulkUpdate = (updates) => BucketModel.bulkWrite(updates);
 
 /**
@@ -64,6 +80,12 @@ const bulkUpdate = (updates) => BucketModel.bulkWrite(updates);
  * @param {string} _id Bucket ID
  */
 const deleteBucket = (_id) => BucketModel.deleteOne({ _id });
+
+/**
+ * @param {FilterQuery} query Bucket query
+ * @return {Promise<{ deletedCount: Number }>} Promise with deleted count property
+ */
+const deleteBucketsList = (query) => BucketModel.deleteMany(query);
 
 const addVideo = (id, videoData) => updateBucketById(id, { $push: { videos: videoData } });
 
@@ -231,8 +253,10 @@ module.exports = {
   createBucket,
   updateBucket,
   updateBucketById,
+  updateBuckets,
   bulkUpdate,
   deleteBucket,
+  deleteBucketsList,
   addVideo,
   createQuestion,
   updateQuestion,
