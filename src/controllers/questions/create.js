@@ -46,7 +46,7 @@ const createQuestionRoute = async (req, res, next) => {
   if (!targetCreatorId) {
     return next(Boom.notFound());
   }
-  if ((typeof targetCreatorId === 'string' && targetCreatorId !== userId) || targetCreatorId.equals?.(userId)) {
+  if ((typeof targetCreatorId === 'string' && targetCreatorId === userId) || targetCreatorId.equals?.(userId)) {
     return next(Boom.forbidden());
   }
 
